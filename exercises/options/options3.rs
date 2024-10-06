@@ -3,19 +3,29 @@
 // Execute `rustlings hint options3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
+#[derive(Debug)]
 struct Point {
     x: i32,
     y: i32,
 }
 
 fn main() {
-    let y: Option<Point> = Some(Point { x: 100, y: 200 });
+    let optional_point = Some(Point { x: 100, y: 200 });
 
-    match y {
-        Some(p) => println!("Co-ordinates are {},{} ", p.x, p.y),
-        _ => panic!("no match!"),
+    // Solution 1: Matching over the `Option` (not `&Option`) but without moving
+    // out of the `Some` variant.
+    match optional_point {
+        Some(ref p) => println!("Co-ordinates are {},{}", p.x, p.y),
+        //   ^^^ added
+        _ => panic!("No match!"),
     }
-    y; // Fix without deleting this line.
+
+    // Solution 2: Matching over a reference (`&Option`) by added `&` before
+    // `optional_point`.
+    match &optional_point {
+        Some(p) => println!("Co-ordinates are {},{}", p.x, p.y),
+        _ => panic!("No match!"),
+    }
+
+    println!("{optional_point:?}");
 }
