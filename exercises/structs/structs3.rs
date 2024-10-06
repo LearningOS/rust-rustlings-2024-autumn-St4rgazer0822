@@ -7,35 +7,41 @@
 // Execute `rustlings hint structs3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 #[derive(Debug)]
 struct Package {
     sender_country: String,
     recipient_country: String,
-    weight_in_grams: i32,
+    weight_in_grams: u32,
 }
 
 impl Package {
-    fn new(sender_country: String, recipient_country: String, weight_in_grams: i32) -> Package {
-        if weight_in_grams <= 0 {
-            panic!("Can not ship a weightless package.")
-        } else {
-            Package {
-                sender_country,
-                recipient_country,
-                weight_in_grams,
-            }
+    fn new(sender_country: String, recipient_country: String, weight_in_grams: u32) -> Self {
+        if weight_in_grams < 10 {
+            // This isn't how you should handle errors in Rust, but we will
+            // learn about error handling later.
+            panic!("Can't ship a package with weight below 10 grams");
+        }
+
+        Self {
+            sender_country,
+            recipient_country,
+            weight_in_grams,
         }
     }
 
-    fn is_international(&self) -> ??? {
-        // Something goes here...
+    fn is_international(&self) -> bool {
+        //                     ^^^^^^^ added
+        self.sender_country != self.recipient_country
     }
 
-    fn get_fees(&self, cents_per_gram: i32) -> ??? {
-        // Something goes here...
+    fn get_fees(&self, cents_per_gram: u32) -> u32 {
+        //                                  ^^^^^^ added
+        self.weight_in_grams * cents_per_gram
     }
+}
+
+fn main() {
+    // You can optionally experiment here.
 }
 
 #[cfg(test)]
@@ -48,7 +54,7 @@ mod tests {
         let sender_country = String::from("Spain");
         let recipient_country = String::from("Austria");
 
-        Package::new(sender_country, recipient_country, -2210);
+        Package::new(sender_country, recipient_country, 5);
     }
 
     #[test]
